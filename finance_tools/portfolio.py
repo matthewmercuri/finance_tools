@@ -44,6 +44,9 @@ class Portfolio:
 
         self.holdings = {}
 
+    def get_holdings_list(self) -> list:
+        return [*self.holdings]
+
     def add_position(self, ticker: str, quantity: float) -> None:
         """
         1. check if the ticker is valid
