@@ -1,5 +1,5 @@
-from data import *
-from errors import InvalidTicker
+from .data import *
+from .errors import InvalidTicker
 
 
 class Portfolio:
@@ -55,5 +55,8 @@ class Portfolio:
         if validate_ticker(ticker, self.data_source) is False:
             raise InvalidTicker(ticker)
 
+        self.holdings[ticker] = {}
+        self.holdings[ticker]["quantity"] = quantity
+
         metadata = ticker_metadata(ticker, self.data_source)
-        self.holdings[ticker] = metadata
+        self.holdings[ticker]["metadata"] = metadata
