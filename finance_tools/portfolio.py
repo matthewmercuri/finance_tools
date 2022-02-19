@@ -47,19 +47,23 @@ class Portfolio:
     def get_holdings_list(self) -> list:
         return [*self.holdings]
 
-    def add_position(self, ticker: str, quantity: float) -> None:
+    def add_position(
+        self, ticker: str, quantity: float, skip_data_call: bool = False
+    ) -> None:
         """
-        1. check if the ticker is valid
-        2. add the ticker to the holdings attributes if valid
-        3. info to add: currency, shares, name
+        Given a ticker and a quantity (amount of shares or weight), this
+        method will add it as a holding to the Portfolio.holdings attribute.
+        If skip_data_call is passed as True, there will be no metadata added
+        nor will ticker validation be performed (could lead to errors later).
         """
         ticker = ticker.strip().upper()
-
-        if validate_ticker(ticker, self.data_source) is False:
-            raise InvalidTicker(ticker)
-
         self.holdings[ticker] = {}
-        self.holdings[ticker]["quantity"] = quantity
 
-        metadata = ticker_metadata(ticker, self.data_source)
-        self.holdings[ticker]["metadata"] = metadata
+        if skip_data_call is not True:
+            if validate_ticker(ticker, self.data_source) is False:
+                raise InvalidTicker(ticker)
+
+            metadata = ticker_metadata(ticker, self.data_source)
+            self.holdings[ticker]["metadata"] = metadata
+
+        self.holdings[ticker]["quantity"] = quantity
